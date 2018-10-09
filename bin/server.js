@@ -79,6 +79,15 @@ function start() {
   // Initialize listeners, IRC listener will be initialized from slack handler
   context.slack.listener.init(context);
   context.terminal.listener.init(context);
+
+  // Start listening on $PORT so cf will be happy
+  if (process.env.PORT) {
+    var http = require('http');
+    var httpServer = http.createServer((req, resp) => {
+      resp.end('I\'m alive.');
+    }).listen(process.env.PORT);
+    logger.info('Listening on ' + httpServer.address().port);
+  }
 }
 
 start();
